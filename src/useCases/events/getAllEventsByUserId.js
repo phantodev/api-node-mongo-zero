@@ -1,8 +1,9 @@
 const Event = require("../../entities/events/Event");
 
-async function getAllEvents(req, res) {
+async function getAllEventsByUserId(req, res) {
   try {
-    const listEvents = await Event.find().limit(3).sort("nameEvent");
+    console.log(req.usuarioId);
+    const listEvents = await Event.findOne({ user: req.usuarioId });
     res.status(200).json(listEvents);
   } catch (error) {
     res.status(400);
@@ -10,4 +11,4 @@ async function getAllEvents(req, res) {
   }
 }
 
-module.exports = getAllEvents;
+module.exports = getAllEventsByUserId;

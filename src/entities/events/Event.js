@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
 const fightSchema = new mongoose.Schema(
   {
@@ -25,6 +26,10 @@ const eventSchema = new mongoose.Schema({
     required: true,
   },
   fights: [fightSchema],
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
 // Criar o modelo 'Event' com base no esquema definido

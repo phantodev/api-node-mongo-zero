@@ -2,6 +2,7 @@ const Event = require("../../entities/events/Event");
 
 async function createEvent(req, res) {
   try {
+    console.log(req.usuarioId);
     const { nameEvent, data, localEvent, fights } = req.body;
 
     const newEvent = new Event({
@@ -9,6 +10,7 @@ async function createEvent(req, res) {
       data: data,
       localEvent: localEvent,
       fights: fights,
+      user: req.usuarioId,
     });
 
     newEvent.save();
