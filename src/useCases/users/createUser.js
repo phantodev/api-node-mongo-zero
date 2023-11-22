@@ -25,7 +25,10 @@ async function createUser(req, res) {
     res.status(200).json({ message: "Usuário cadastrado com sucesso!" });
   } catch (error) {
     console.error(error);
-    res.status(400).json({ message: "Erro no banco!" });
+    if (error.code === "11000") {
+      res.status(409).json({ message: "O email está cadastrado já!" });
+    }
+    res.status(400).json({ message: "Error do banco!" });
   }
 }
 

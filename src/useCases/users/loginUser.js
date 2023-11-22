@@ -1,6 +1,8 @@
 const User = require("../../entities/users/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+dotenv.config();
 
 async function loginUser(req, res) {
   try {
@@ -14,9 +16,13 @@ async function loginUser(req, res) {
       if (!senhaValida) {
         return res.status(400).json({ message: "Credenciais inválidas!" });
       } else {
-        const token = jwt.sign({ id: usuarioExistente._id }, "XINGLING", {
-          expiresIn: "24h",
-        });
+        const token = jwt.sign(
+          { id: usuarioExistente._id },
+          process.env.JWT_SECRET,
+          {
+            expiresIn: "24h",
+          }
+        );
         return res
           .status(200)
           .json({ message: "Login efetuado com sucesso!", token });

@@ -5,11 +5,16 @@ const deleteUser = require("../useCases/users/deleteUser");
 const getAllUsers = require("../useCases/users/getAllUsers");
 const getUserById = require("../useCases/users/getUserById");
 const loginUser = require("../useCases/users/loginUser");
+const forgotPassword = require("../useCases/users/forgotPassword");
+const verifyCode = require("../useCases/users/verifyCode");
 const verifyToken = require("../middlewares/verifyToken");
 
 const router = express.Router();
 
 router.get("/user", verifyToken, getAllUsers);
+
+router.post("/user/forgot-password", forgotPassword);
+router.post("/user/verify-code", verifyCode);
 
 router.get("/user/:id", verifyToken, getUserById);
 

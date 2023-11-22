@@ -15,6 +15,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  resetCode: {
+    type: String,
+  },
 });
 
 // Criar o modelo 'User' com base no esquema definido
