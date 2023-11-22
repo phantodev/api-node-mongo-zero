@@ -7,6 +7,7 @@ const getUserById = require("../useCases/users/getUserById");
 const loginUser = require("../useCases/users/loginUser");
 const forgotPassword = require("../useCases/users/forgotPassword");
 const verifyCode = require("../useCases/users/verifyCode");
+const changePassword = require("../useCases/users/changePassword");
 const verifyToken = require("../middlewares/verifyToken");
 
 const router = express.Router();
@@ -14,7 +15,10 @@ const router = express.Router();
 router.get("/user", verifyToken, getAllUsers);
 
 router.post("/user/forgot-password", forgotPassword);
+
 router.post("/user/verify-code", verifyCode);
+
+router.post("/user/change-password", changePassword);
 
 router.get("/user/:id", verifyToken, getUserById);
 

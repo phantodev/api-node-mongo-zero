@@ -1,18 +1,24 @@
 const User = require("../../entities/users/User");
-const bcrypt = require("bcrypt");
 
 async function verifyCode(req, res) {
   try {
-    const { code, email } = req.body;
-    const user = await User.findOne({ email });
-    const match = await bcrypt.compare(code, user.resetCode);
-    if (!match) {
-      return res.status(400).send("Invalid code");
+    const { email, code } = req.body;
+    const userExist = await User.findOne({ email });
+    if (userExist) {
+      console.log(code);
+      console.log(userExist.resetCode);
+      if (userExist.resetCode === code) {
+        res.send({ message: "Código Válido!" });
+      } else {
+        res.send({ message: "Código Inválido!" });
+      }
+    } else {
+      res.send({ message: "E-mail não existe na base!" });
     }
-    res.status(200).json({ message: "Código Verificado!" });
   } catch (error) {
-    console.error(error);
-    res.status(400).json({ message: "Erro no sendgrid!" });
+    console.log(error);
+    res.status(400);
+    res.send({ message: "Erro no banco!" });
   }
 }
 

@@ -3,23 +3,29 @@ const bcrypt = require("bcrypt");
 
 async function changePassword(req, res) {
   try {
-    const { email, code, newpassword } = req.body;
-    const user = await User.findOne({ email });
-    const match = await bcrypt.compare(code, user.resetCode);
-    if (!match) {
-      return res.status(400).send("Invalid code");
+    const { email, code, newPassword } = req.body;
+    const userExist = await User.findOne({ email });
+    // const match = bcrypt.compare(code, userExist.resetCode);
+    if (userExist) {
+      if (code === userExist.resetCode) {
+        const salt = bcrypt.genSaltSync(10);
+        const hashPassword = bcrypt.hashSync(newPassword, salt);
+        await User.updateOne(
+          { _id: userExist._id },
+          { $set: { password: hashPassword } },
+          { new: true }
+        );
+        res.send({ message: "Senha alterada com sucesso!" });
+      } else {
+        res.send({ message: "Código Inválido!" });
+      }
+    } else {
+      res.send({ message: "E-mail não existe na base!" });
     }
-    const salt = await bcrypt.genSalt(10);
-    const hashedpassword = await bcrypt.hash(newpassword, salt);
-    await User.updateOne(
-      { _id: user._id },
-      { $set: { password: hashedpassword } },
-      { new: true }
-    );
-    return res.send("Senha Alterada!");
   } catch (error) {
-    console.error(error);
-    res.status(400).json({ message: "Erro no sendgrid!" });
+    console.log(error);
+    res.status(400);
+    res.send({ message: "Erro no banco!" });
   }
 }
 
